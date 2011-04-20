@@ -20,6 +20,7 @@ package org.apache.maven.surefire.booter;
  */
 
 import org.apache.maven.surefire.report.ReporterConfiguration;
+import org.apache.maven.surefire.testset.BatchParameters;
 import org.apache.maven.surefire.testset.DirectoryScannerParameters;
 import org.apache.maven.surefire.testset.TestArtifactInfo;
 import org.apache.maven.surefire.testset.TestRequest;
@@ -77,9 +78,19 @@ public class BooterDeserializer
         final File testClassesDirectory = properties.getFileProperty( TEST_CLASSES_DIRECTORY );
         final String runOrder = properties.getProperty( RUN_ORDER );
 
+        final boolean batchTestsEnabled = properties.getBooleanProperty(BATCH_TESTS_ENABLED);
+
+        BatchParameters batchParameters = BatchParameters.EMPTY_PARAMETERS;
+        if (batchTestsEnabled)
+        {
+            batchParameters = BatchParameters.builder().batchNumber(properties.getIntegerObjectProperty(BATCH_TESTS_NUMBER).intValue()).
+                    numberOfBatches(properties.getIntegerObjectProperty(BATCH_TESTS_NUMBER_OF_BATCHES).intValue()).batchingEnabled(true).build();
+
+        }
+
         DirectoryScannerParameters dirScannerParams =
             new DirectoryScannerParameters( testClassesDirectory, includesList, excludesList,
-                                            properties.getBooleanObjectProperty( FAILIFNOTESTS ), runOrder );
+                                            properties.getBooleanObjectProperty( FAILIFNOTESTS ), runOrder, batchParameters );
 
         TestArtifactInfo testNg = new TestArtifactInfo( testNgVersion, testArtifactClassifier );
         TestRequest testSuiteDefinition = new TestRequest( testSuiteXmlFiles, sourceDirectory, requestedTest, requestedTestMethod );

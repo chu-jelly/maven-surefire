@@ -61,6 +61,7 @@ import org.apache.maven.surefire.report.FileReporter;
 import org.apache.maven.surefire.report.ForkingConsoleReporter;
 import org.apache.maven.surefire.report.ReporterConfiguration;
 import org.apache.maven.surefire.report.XMLReporter;
+import org.apache.maven.surefire.testset.BatchParameters;
 import org.apache.maven.surefire.testset.DirectoryScannerParameters;
 import org.apache.maven.surefire.testset.TestArtifactInfo;
 import org.apache.maven.surefire.testset.TestRequest;
@@ -317,7 +318,7 @@ public abstract class AbstractSurefireMojo
             List excludes = getExcludeList();
             directoryScannerParameters = new DirectoryScannerParameters( getTestClassesDirectory(), includes, excludes,
                                                                          Boolean.valueOf( failIfNoTests ),
-                                                                         getRunOrder() );
+                                                                         getRunOrder(), getBatchParameters());
         }
 
         Properties providerProperties = getProperties();
@@ -350,6 +351,10 @@ public abstract class AbstractSurefireMojo
         }
 
         return providerConfiguration1;
+    }
+
+    protected BatchParameters getBatchParameters() {
+         return BatchParameters.EMPTY_PARAMETERS;
     }
 
     protected StartupConfiguration createStartupConfiguration( ForkConfiguration forkConfiguration,

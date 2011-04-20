@@ -106,7 +106,7 @@ public class ProviderConfiguration
             return null;
         }
         return new Object[]{ dirScannerParams.getTestClassesDirectory(), dirScannerParams.getIncludes(),
-            dirScannerParams.getExcludes() };
+            dirScannerParams.getExcludes(), dirScannerParams.getBatchParameters() };
     }
 
     public List getIncludes()

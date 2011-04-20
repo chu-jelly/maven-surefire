@@ -19,6 +19,8 @@ package org.apache.maven.surefire.util;
  * under the License.
  */
 
+import org.apache.maven.surefire.testset.BatchParameters;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,14 +58,23 @@ public class DefaultDirectoryScanner
 
     private final String runOrder;
 
+    private final TestListTransformer testListTransformer;
 
-    public DefaultDirectoryScanner( File basedir, List includes, List excludes, String runOrder )
+    public DefaultDirectoryScanner(File basedir, List includes, List excludes, String runOrder, BatchParameters batchParameters)
     {
         this.basedir = basedir;
         this.includes = includes;
         this.excludes = excludes;
         this.runOrder = runOrder;
         this.sortOrder = getSortOrderComparator( runOrder );
+        this.testListTransformer = (batchParameters != null && batchParameters.isBatchingEnabled()) ?
+                (TestListTransformer) new BatchTestListTransformer(batchParameters) :
+                new IdentityTestListTransformer();
+    }
+
+    public DefaultDirectoryScanner( File basedir, List includes, List excludes, String runOrder )
+    {
+        this(basedir, includes, excludes, runOrder, BatchParameters.EMPTY_PARAMETERS);
     }
 
     public TestsToRun locateTestClasses( ClassLoader classLoader, ScannerFilter scannerFilter )
@@ -86,6 +97,10 @@ public class DefaultDirectoryScanner
                 classesSkippedByValidation.add( testClass );
             }
         }
+
+        // Modify the list of test classes.
+        result = this.testListTransformer.transformTestList(result);
+
         if ( "random".equals( runOrder ) )
         {
             Collections.shuffle( result );

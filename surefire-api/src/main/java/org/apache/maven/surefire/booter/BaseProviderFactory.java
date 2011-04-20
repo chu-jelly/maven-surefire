@@ -59,10 +59,12 @@ public class BaseProviderFactory
         {
             return null;
         }
+
         return new DefaultDirectoryScanner( directoryScannerParameters.getTestClassesDirectory(),
                                             directoryScannerParameters.getIncludes(),
                                             directoryScannerParameters.getExcludes(),
-                                            directoryScannerParameters.getRunOrder());
+                                            directoryScannerParameters.getRunOrder(),
+                                            directoryScannerParameters.getBatchParameters());
     }
 
     public ReporterFactory getReporterFactory()

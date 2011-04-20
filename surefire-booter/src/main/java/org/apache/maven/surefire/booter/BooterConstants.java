@@ -50,4 +50,8 @@ public interface BooterConstants
     String TEST_SUITE_XML_FILES = "testSuiteXmlFiles";
     String PROVIDER_CONFIGURATION = "providerConfiguration";
     String FORKTESTSET = "forkTestSet";
+
+    String BATCH_TESTS_ENABLED = "batchTestsEnabled";
+    String BATCH_TESTS_NUMBER_OF_BATCHES = "batchTestsNumberOfBatches";
+    String BATCH_TESTS_NUMBER = "batchTestNumber";
 }

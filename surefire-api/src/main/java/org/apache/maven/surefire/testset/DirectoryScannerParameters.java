@@ -37,13 +37,21 @@ public class DirectoryScannerParameters
 
     private final String runOrder;
 
-    public DirectoryScannerParameters( File testClassesDirectory, List includes, List excludes, Boolean failIfNoTests, String runOrder )
+    private final BatchParameters batchParameters;
+
+    public DirectoryScannerParameters(File testClassesDirectory, List includes, List excludes, Boolean failIfNoTests, String runOrder, BatchParameters batchParameters)
     {
         this.testClassesDirectory = testClassesDirectory;
         this.includes = includes;
         this.excludes = excludes;
         this.failIfNoTests = failIfNoTests;
         this.runOrder = runOrder;
+        this.batchParameters = batchParameters;
+    }
+
+    public DirectoryScannerParameters( File testClassesDirectory, List includes, List excludes, Boolean failIfNoTests, String runOrder )
+    {
+        this(testClassesDirectory, includes, excludes, failIfNoTests, runOrder, BatchParameters.EMPTY_PARAMETERS);
     }
 
     /**
@@ -85,5 +93,10 @@ public class DirectoryScannerParameters
     public String getRunOrder()
     {
         return runOrder;
+    }
+
+    public BatchParameters getBatchParameters()
+    {
+        return batchParameters;
     }
 }

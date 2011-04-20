@@ -40,6 +40,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.surefire.booter.ClassLoaderConfiguration;
 import org.apache.maven.surefire.booter.SurefireBooterForkException;
 import org.apache.maven.surefire.booter.SurefireExecutionException;
+import org.apache.maven.surefire.testset.BatchParameters;
 import org.apache.maven.toolchain.ToolchainManager;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -480,6 +481,30 @@ public class SurefirePlugin
     private boolean trimStackTrace;
 
     /**
+     * If enabled test will be split up in batches.
+     *
+     * @parameter expression="${batchTestsEnabled}" default-value="false"
+     * @since 2.8.1-atlassian-1
+     */
+    private boolean batchTestsEnabled;
+
+    /**
+     * The number of batches. The batch size will depend on the number of tests included.
+     *
+     * @parameter expression="${batchTestsNumberOfBatches}"
+     * @since 2.8.1-atlassian-1
+     */
+    private int batchTestsNumberOfBatches;
+
+    /**
+     * The batch to run.
+     *
+     * @parameter expression="${batchTestNumber}"
+     * @since 2.8.1-atlassian-1
+     */
+    private int batchTestNumber;
+
+    /**
      * Resolves the artifacts needed.
      *
      * @component
@@ -640,7 +665,18 @@ public class SurefirePlugin
         writeSummary(result);
     }
 
-	private void writeSummary(int result) throws MojoFailureException {
+    protected BatchParameters getBatchParameters()
+    {
+        if (this.batchTestsEnabled)
+        {
+            getLog().info("Running tests in batch mode: " + batchTestsNumberOfBatches + " batches, current batch: " + batchTestNumber);
+            return BatchParameters.builder().batchNumber(batchTestNumber).numberOfBatches(batchTestsNumberOfBatches).batchingEnabled(true).build();
+        }
+        getLog().info("Batch mode is disabled.");
+        return BatchParameters.EMPTY_PARAMETERS;
+    }
+
+    private void writeSummary(int result) throws MojoFailureException {
 		SurefireHelper.reportExecution( this, result, getLog() );
 	}
 
@@ -1299,5 +1335,19 @@ public class SurefirePlugin
     protected void addPluginSpecificChecksumItems( ChecksumCalculator checksum )
     {
     }
-    
+
+    public void setBatchTestsEnabled(boolean batchTestsEnabled)
+    {
+        this.batchTestsEnabled = batchTestsEnabled;
+    }
+
+    public void setBatchTestsNumberOfBatches(int batchTestsNumberOfBatches)
+    {
+        this.batchTestsNumberOfBatches = batchTestsNumberOfBatches;
+    }
+
+    public void setBatchTestNumber(int batchTestNumber)
+    {
+        this.batchTestNumber = batchTestNumber;
+    }
 }

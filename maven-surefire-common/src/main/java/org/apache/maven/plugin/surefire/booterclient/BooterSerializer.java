@@ -106,6 +106,10 @@ public class BooterSerializer
             properties.setProperty( BooterConstants.TEST_CLASSES_DIRECTORY,
                                     directoryScannerParameters.getTestClassesDirectory() );
             properties.setProperty( BooterConstants.RUN_ORDER, directoryScannerParameters.getRunOrder() );
+
+            properties.setProperty( BooterConstants.BATCH_TESTS_ENABLED, Boolean.valueOf(directoryScannerParameters.getBatchParameters().isBatchingEnabled()) );
+            properties.setProperty( BooterConstants.BATCH_TESTS_NUMBER, Integer.valueOf(directoryScannerParameters.getBatchParameters().getBatchNumber()) );
+            properties.setProperty( BooterConstants.BATCH_TESTS_NUMBER_OF_BATCHES, Integer.valueOf(directoryScannerParameters.getBatchParameters().getNumberOfBatches()) );
         }
 
         ReporterConfiguration reporterConfiguration = booterConfiguration.getReporterConfiguration();

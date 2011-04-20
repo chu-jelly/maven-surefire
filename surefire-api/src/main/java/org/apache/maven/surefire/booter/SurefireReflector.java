@@ -22,6 +22,7 @@ package org.apache.maven.surefire.booter;
 import org.apache.maven.surefire.providerapi.ProviderParameters;
 import org.apache.maven.surefire.report.ReporterConfiguration;
 import org.apache.maven.surefire.suite.RunResult;
+import org.apache.maven.surefire.testset.BatchParameters;
 import org.apache.maven.surefire.testset.DirectoryScannerParameters;
 import org.apache.maven.surefire.testset.TestArtifactInfo;
 import org.apache.maven.surefire.testset.TestRequest;
@@ -70,6 +71,8 @@ public class SurefireReflector
 
     private final Class booterParameters;
 
+    private final Class batchParameters;
+
     public SurefireReflector( ClassLoader surefireClassLoader )
     {
         this.classLoader = surefireClassLoader;
@@ -88,6 +91,7 @@ public class SurefireReflector
             providerPropertiesAware = surefireClassLoader.loadClass( ProviderPropertiesAware.class.getName() );
             runResult = surefireClassLoader.loadClass( RunResult.class.getName() );
             booterParameters = surefireClassLoader.loadClass( ProviderParameters.class.getName() );
+            batchParameters = surefireClassLoader.loadClass( BatchParameters.class.getName() );
         }
         catch ( ClassNotFoundException e )
         {
@@ -159,14 +163,30 @@ public class SurefireReflector
         {
             return null;
         }
-        Class[] arguments = { File.class, List.class, List.class, Boolean.class, String.class };
-        Constructor constructor = ReflectionUtils.getConstructor( this.directoryScannerParameters, arguments );
-        return ReflectionUtils.newInstance( constructor,
-                                            new Object[]{ directoryScannerParameters.getTestClassesDirectory(),
-                                                directoryScannerParameters.getIncludes(),
-                                                directoryScannerParameters.getExcludes(),
-                                                directoryScannerParameters.isFailIfNoTests(),
-                                                directoryScannerParameters.getRunOrder() } );
+        Class[] arguments = { File.class, List.class, List.class, Boolean.class, String.class, BatchParameters.class };
+        Constructor constructor;
+        try
+        {
+            constructor = ReflectionUtils.getConstructor(this.directoryScannerParameters, arguments);
+            return ReflectionUtils.newInstance(constructor,
+                    new Object[]{directoryScannerParameters.getTestClassesDirectory(),
+                            directoryScannerParameters.getIncludes(),
+                            directoryScannerParameters.getExcludes(),
+                            directoryScannerParameters.isFailIfNoTests(),
+                            directoryScannerParameters.getRunOrder(),
+                            directoryScannerParameters.getBatchParameters()});
+        }
+        catch (SurefireReflectionException sre)
+        {
+            // Fallback to work around the fact that surefire uses an older version of the surefire plugin to test itself...
+            constructor = ReflectionUtils.getConstructor(this.directoryScannerParameters, new Class[]{File.class, List.class, List.class, Boolean.class, String.class});
+            return ReflectionUtils.newInstance(constructor,
+                    new Object[]{directoryScannerParameters.getTestClassesDirectory(),
+                            directoryScannerParameters.getIncludes(),
+                            directoryScannerParameters.getExcludes(),
+                            directoryScannerParameters.isFailIfNoTests(),
+                            directoryScannerParameters.getRunOrder()});
+        }
     }
 
     Object createTestArtifactInfo( TestArtifactInfo testArtifactInfo )
