@@ -100,9 +100,9 @@
   </modules>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/surefire/trunk/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/surefire/trunk/</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/surefire/trunk</url>
+    <connection>scm:git:https://juretta@github.com/atlassian/maven-surefire.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:atlassian/maven-surefire.git</developerConnection>
+    <url>https://github.com/atlassian/maven-surefire</url>
   </scm>
   <issueManagement>
     <system>jira</system>
