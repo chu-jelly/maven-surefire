@@ -94,6 +94,14 @@
     <developerConnection>scm:git:git@github.com:atlassian/maven-surefire.git</developerConnection>
     <url>https://github.com/atlassian/maven-surefire</url>
   </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>atlassian-3rdparty</id>
+            <url>dav:https://maven.atlassian.com/3rdparty</url>
+        </repository>
+    </distributionManagement>
+
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/SUREFIRE</url>
