@@ -93,7 +93,7 @@
 
   <scm>
     <connection>scm:git:https://github.com/atlassian/maven-surefire.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:atlassian/maven-surefire.git</developerConnection>
+    <developerConnection>scm:git:git@github.com/atlassian/maven-surefire.git</developerConnection>
     <url>https://github.com/atlassian/maven-surefire</url>
   </scm>
 
