@@ -97,9 +97,9 @@
   </modules>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/surefire/tags/surefire-2.5</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/surefire/tags/surefire-2.5</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/surefire/tags/surefire-2.5</url>
+    <connection>scm:git:git@github.com:atlassian/maven-surefire.git</connection>
+    <developerConnection>scm:git:git@github.com:atlassian/maven-surefire.git</developerConnection>
+    <url>https://github.com/atlassian/maven-surefire</url>
   </scm>
   <issueManagement>
     <system>jira</system>
